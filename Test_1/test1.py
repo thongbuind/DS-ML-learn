@@ -29,4 +29,4 @@ model.fit(x_train, y_train)
 # Model evaluation
 y_predict = model.predict(x_test)
 print(classification_report(y_test, y_predict))
-
+    #Chua biet lam huhu
