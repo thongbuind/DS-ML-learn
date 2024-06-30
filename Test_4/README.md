@@ -1,4 +1,4 @@
-Wowww lần đầu tiên đc kết quả cao vậy.  
+Wowww lần đầu tiên đc kết quả cao vậy.\n
               precision    recall   f1-score   support. 
 Negative        0.91        0.98      0.94        41.  
 Positive        0.98        0.94      0.96        63. 
