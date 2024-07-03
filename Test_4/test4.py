@@ -46,7 +46,7 @@ preprocessor = ColumnTransformer(transformers=[
 ])
 cls_model = Pipeline(steps=[
     ('pre', preprocessor),
-    ('model', RandomForestClassifier())
+    ('model', RandomForestClassifier(random_state=5426))
 ])
 
 # Fit model

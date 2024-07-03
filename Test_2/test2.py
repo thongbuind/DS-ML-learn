@@ -39,7 +39,7 @@ preprocessor = ColumnTransformer(transformers=[
 #Select model
 pipeline = Pipeline (steps=[
     ('preprocessor', preprocessor),
-    ('classification', RandomForestClassifier())
+    ('classification', RandomForestClassifier(random_state=5426))
 ])
 
 # Fit model

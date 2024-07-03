@@ -1,13 +1,13 @@
 import pandas as pd
 from ydata_profiling import ProfileReport
-from sklearn.model_selection import train_test_split 
+from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.preprocessing import StandardScaler, OrdinalEncoder, OneHotEncoder
 from sklearn.linear_model import LinearRegression
 from sklearn.impute import SimpleImputer
 from sklearn.pipeline import Pipeline
 from sklearn.compose import ColumnTransformer
 from sklearn.metrics import r2_score
-
+from sklearn.ensemble import RandomForestRegressor
 
 data = pd.read_csv("StudentScore.xls")
 # profile = ProfileReport(data, title="StudentScore Report", explorative=True)
@@ -50,12 +50,18 @@ preprocessor = ColumnTransformer(transformers=[
 # Select model
 reg_model = Pipeline(steps=[
     ('preprocessor', preprocessor),
-    ('model', LinearRegression())
+    ('model', RandomForestRegressor(random_state=5426))
 ])
-
+param_grid = {
+    'model__n_estimators': [50, 100, 500],
+    'model__max_depth': [None, 10, 20, 30],
+    'model__min_samples_split': [2, 5, 10],
+    'model__min_samples_leaf': [1, 2, 4]
+}
+model = GridSearchCV(estimator=reg_model, param_grid=param_grid, scoring='r2', cv=5, n_jobs=-1, verbose=2)
 # Fit model
-reg_model.fit(x_train, y_train)
-predictions = reg_model.predict(x_test)
+model.fit(x_train, y_train)
+predictions = model.predict(x_test)
 
 # Model evaluation
 print("R2_score: {}".format(r2_score(y_test, predictions)))
