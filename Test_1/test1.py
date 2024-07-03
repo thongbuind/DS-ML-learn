@@ -39,10 +39,10 @@ model = GridSearchCV(estimator=cls_model, param_grid=params, scoring="recall_mac
 
 # Fit model
 model.fit(x_train, y_train)
-predictions = model.predict(x_test)
+probabilities = model.predict_proba(x_test)[:, 1]
+threshold = 0.4
+new_predictions = (probabilities >= threshold).astype(int)
 
-# Model evaluation
-print(classification_report(y_test, predictions))
-
+print(classification_report(y_test, new_predictions))
 
 
