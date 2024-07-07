@@ -1,12 +1,13 @@
 import pandas as pd
 # from ydata_profiling import ProfileReport
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler, OrdinalEncoder
 from sklearn.impute import SimpleImputer
 from sklearn.compose import ColumnTransformer
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import classification_report
+from sklearn.preprocessing import LabelEncoder
 
 data = pd.read_excel("diabetes_data.xlsx")
 # profile = ProfileReport(data, title="Diabetes_dataReport", explorative=True)
@@ -48,10 +49,21 @@ cls_model = Pipeline(steps=[
     ('pre', preprocessor),
     ('model', RandomForestClassifier(random_state=5426))
 ])
+params = {
+    "model__n_estimators": [50, 100, 200, 500],
+    "model__criterion": ["gini", "entropy", "log_loss"],
+    "model__max_depth": [None, 2, 5],
+    "model__min_samples_split": [2, 5, 10]
+}
+model = GridSearchCV(estimator=cls_model, param_grid=params, scoring="recall_macro", cv=6, verbose=2,
+                     n_jobs=6)
 
 # Fit model
-cls_model.fit(x_train, y_train)
-predictions = cls_model.predict(x_test)
+model.fit(x_train, y_train)
+predictions = model.predict(x_test)
 
 # Model evaluation
 print(classification_report(y_test, predictions))
+
+
+
